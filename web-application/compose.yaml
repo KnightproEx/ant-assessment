@@ -2,7 +2,10 @@ name: ant-assessment
 services:
   web-application-version-1:
     container_name: ant-assessment-web-application-version-1
-    build: .
+    build:
+      context: .
+      args:
+        VERSION: 1
     ports:
       - 3011:3000
     stdin_open: true
@@ -11,14 +14,16 @@ services:
       db:
         condition: service_healthy
     environment:
-      VERSION: 1
       DATABASE_URL: postgresql://${POSTGRES_USER}:${POSTGRES_PW}@db:5432/${POSTGRES_DB}?schema=public
     networks:
       - db-network
 
   web-application-version-2:
     container_name: ant-assessment-web-application-version-2
-    build: .
+    build:
+      context: .
+      args:
+        VERSION: 2
     ports:
       - 3012:3000
     stdin_open: true
@@ -27,14 +32,16 @@ services:
       db:
         condition: service_healthy
     environment:
-      VERSION: 2
       DATABASE_URL: postgresql://${POSTGRES_USER}:${POSTGRES_PW}@db:5432/${POSTGRES_DB}?schema=public
     networks:
       - db-network
 
   web-application-version-3:
     container_name: ant-assessment-web-application-version-3
-    build: .
+    build:
+      context: .
+      args:
+        VERSION: 3
     ports:
       - 3013:3000
     stdin_open: true
@@ -43,7 +50,6 @@ services:
       db:
         condition: service_healthy
     environment:
-      VERSION: 3
       DATABASE_URL: postgresql://${POSTGRES_USER}:${POSTGRES_PW}@db:5432/${POSTGRES_DB}?schema=public
     networks:
       - db-network
