@@ -1,0 +1,19 @@
+# Build files
+.output/
+.vinxi/
+
+# Prisma
+app/generated/
+
+# Node files
+node_modules/
+
+# Docker compose data
+.data/
+
+# Environment files
+*.env*
+!*.env*.example
+
+# Others
+.DS_Store

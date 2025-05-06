@@ -1,0 +1,73 @@
+name: ant-assessment
+services:
+  web-application-version-1:
+    container_name: ant-assessment-web-application-version-1
+    build: .
+    ports:
+      - 3011:3000
+    stdin_open: true
+    tty: true
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      VERSION: 1
+      DATABASE_URL: postgresql://${POSTGRES_USER}:${POSTGRES_PW}@db:5432/${POSTGRES_DB}?schema=public
+    networks:
+      - db-network
+
+  web-application-version-2:
+    container_name: ant-assessment-web-application-version-2
+    build: .
+    ports:
+      - 3012:3000
+    stdin_open: true
+    tty: true
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      VERSION: 2
+      DATABASE_URL: postgresql://${POSTGRES_USER}:${POSTGRES_PW}@db:5432/${POSTGRES_DB}?schema=public
+    networks:
+      - db-network
+
+  web-application-version-3:
+    container_name: ant-assessment-web-application-version-3
+    build: .
+    ports:
+      - 3013:3000
+    stdin_open: true
+    tty: true
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      VERSION: 3
+      DATABASE_URL: postgresql://${POSTGRES_USER}:${POSTGRES_PW}@db:5432/${POSTGRES_DB}?schema=public
+    networks:
+      - db-network
+
+  db:
+    container_name: ant-assessment-postgres-db
+    image: postgres:15
+    restart: always
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PW}
+    ports:
+      - "5432:5432"
+    networks:
+      - db-network
+    volumes:
+      - .data/postgres:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d postgres"]
+      interval: 5s
+      timeout: 2s
+      retries: 20
+
+networks:
+  db-network:
+    name: ant-assessment-db-network
